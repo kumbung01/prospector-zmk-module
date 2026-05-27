@@ -40,9 +40,19 @@ static void update_peripheral_display(uint8_t source, uint8_t level, bool connec
         return;
     }
 
-    lv_arc_set_value(arc, connected ? level : 0);
-    lv_obj_set_style_arc_color(arc,
-        lv_color_hex(connected ? DISPLAY_COLOR_ARC_INDICATOR : DISPLAY_COLOR_ARC_BG),
+    int target = connected ? level : 0;
+
+    lv_anim_t a;
+    lv_anim_init(&a);
+    lv_anim_set_var(&a, arc);
+    lv_anim_set_path_cb(&a, lv_anim_path_ease_out);
+    lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_arc_set_value);
+    lv_anim_set_values(&a, lv_arc_get_value(arc), target);
+    lv_anim_set_time(&a, 500);
+    lv_anim_start(&a);
+
+    lv_obj_set_style_arc_color(
+        arc, lv_color_hex(connected ? DISPLAY_COLOR_ARC_INDICATOR : DISPLAY_COLOR_ARC_BG),
         LV_PART_INDICATOR);
 
     if (PERIPHERAL_COUNT == 1 && peripheral_label) {
