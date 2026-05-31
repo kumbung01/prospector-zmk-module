@@ -34,7 +34,6 @@ static void update_peripheral_display(uint8_t source, uint8_t level, bool connec
     if (source >= max_displayed) {
         return;
     }
-
     lv_obj_t *arc = peripheral_arcs[source];
     if (!arc) {
         return;
@@ -54,7 +53,6 @@ static void update_peripheral_display(uint8_t source, uint8_t level, bool connec
     lv_obj_set_style_arc_color(
         arc, lv_color_hex(connected ? DISPLAY_COLOR_ARC_INDICATOR : DISPLAY_COLOR_ARC_BG),
         LV_PART_INDICATOR);
-
     if (PERIPHERAL_COUNT == 1 && peripheral_label) {
         if (connected && level > 0) {
             lv_label_set_text_fmt(peripheral_label, "%d", level);
@@ -142,7 +140,8 @@ ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_circles_battery, struct battery_updat
 ZMK_SUBSCRIPTION(widget_battery_circles_battery, zmk_peripheral_battery_state_changed);
 
 ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_circles_connection, struct connection_update_state,
-                            battery_circles_connection_update_cb, battery_circles_get_connection_state);
+                            battery_circles_connection_update_cb,
+                            battery_circles_get_connection_state);
 ZMK_SUBSCRIPTION(widget_battery_circles_connection, zmk_split_central_status_changed);
 
 static lv_obj_t *create_arc(lv_obj_t *parent, int size, int x, int y, int width) {
@@ -172,7 +171,8 @@ static lv_obj_t *create_arc(lv_obj_t *parent, int size, int x, int y, int width)
 int zmk_widget_battery_circles_init(struct zmk_widget_battery_circles *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 108, 62);
-    lv_obj_set_style_bg_color(widget->obj, lv_color_hex(DISPLAY_COLOR_BATTERY_PANEL_BG), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(widget->obj, lv_color_hex(DISPLAY_COLOR_BATTERY_PANEL_BG),
+                              LV_PART_MAIN);
     lv_obj_set_style_bg_opa(widget->obj, 255, LV_PART_MAIN);
     lv_obj_set_style_radius(widget->obj, 24, LV_PART_MAIN);
     lv_obj_set_style_border_width(widget->obj, 0, LV_PART_MAIN);
@@ -185,7 +185,8 @@ int zmk_widget_battery_circles_init(struct zmk_widget_battery_circles *widget, l
         peripheral_label = lv_label_create(widget->obj);
         lv_label_set_text(peripheral_label, "");
         lv_obj_set_style_text_font(peripheral_label, &Symbols_Medium_28, LV_PART_MAIN);
-        lv_obj_set_style_text_color(peripheral_label, lv_color_hex(DISPLAY_COLOR_ARC_INDICATOR), LV_PART_MAIN);
+        lv_obj_set_style_text_color(peripheral_label, lv_color_hex(DISPLAY_COLOR_ARC_INDICATOR),
+                                    LV_PART_MAIN);
         lv_obj_set_style_text_align(peripheral_label, LV_TEXT_ALIGN_RIGHT, LV_PART_MAIN);
         lv_obj_align(peripheral_label, LV_ALIGN_RIGHT_MID, -19, -1);
 
@@ -196,7 +197,8 @@ int zmk_widget_battery_circles_init(struct zmk_widget_battery_circles *widget, l
         int y_center = (62 - arc_size) / 2;
 
         for (int i = 0; i < 2; i++) {
-            peripheral_arcs[i] = create_arc(widget->obj, arc_size, left_pad + i * (arc_size + arc_gap), y_center, 6);
+            peripheral_arcs[i] =
+                create_arc(widget->obj, arc_size, left_pad + i * (arc_size + arc_gap), y_center, 6);
         }
 
     } else {
@@ -207,7 +209,8 @@ int zmk_widget_battery_circles_init(struct zmk_widget_battery_circles *widget, l
         int max_displayed = PERIPHERAL_COUNT > 3 ? 3 : PERIPHERAL_COUNT;
 
         for (int i = 0; i < max_displayed; i++) {
-            peripheral_arcs[i] = create_arc(widget->obj, arc_size, left_pad + i * (arc_size + arc_gap), y_center, 4);
+            peripheral_arcs[i] =
+                create_arc(widget->obj, arc_size, left_pad + i * (arc_size + arc_gap), y_center, 4);
         }
     }
 

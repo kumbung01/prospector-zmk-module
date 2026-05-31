@@ -47,8 +47,7 @@ static void activate_caps_word(const struct device *dev) {
 
     data->active = true;
 
-    raise_zmk_caps_word_state_changed(
-        (struct zmk_caps_word_state_changed){.active = true});
+    raise_zmk_caps_word_state_changed((struct zmk_caps_word_state_changed){.active = true});
 }
 
 static void deactivate_caps_word(const struct device *dev) {
@@ -56,8 +55,7 @@ static void deactivate_caps_word(const struct device *dev) {
 
     data->active = false;
 
-    raise_zmk_caps_word_state_changed(
-        (struct zmk_caps_word_state_changed){.active = false});
+    raise_zmk_caps_word_state_changed((struct zmk_caps_word_state_changed){.active = false});
 }
 
 static int on_caps_word_binding_pressed(struct zmk_behavior_binding *binding,
@@ -156,7 +154,7 @@ static int caps_word_keycode_state_changed_listener(const zmk_event_t *eh) {
         caps_word_enhance_usage(config, ev);
 
         if (!caps_word_is_alpha(ev->keycode) && !caps_word_is_numeric(ev->keycode) &&
-            !is_mod(ev->usage_page, ev->keycode) &&
+            // !is_mod(ev->usage_page, ev->keycode) &&
             !caps_word_is_caps_includelist(config, ev->usage_page, ev->keycode,
                                            ev->implicit_modifiers)) {
             LOG_DBG("Deactivating caps_word for 0x%02X - 0x%02X", ev->usage_page, ev->keycode);
